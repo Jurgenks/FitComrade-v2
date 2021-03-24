@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,12 +13,24 @@ namespace FitComradeV2.Models
         public string Password { get; set; }
         public int CustomerID { get; set; }
 
-        public void Login(string usr, string pass)
+        
+        public Profile Login(ISession session, Profile profile)
         {
-            var data = new Profile();
-            if(usr.Equals(data.UserName) && pass.Equals(data.Password))
+            var db = new Data.FitComradeV2Context();
+            var login = db.Profiles.Where(s => s.UserName.Equals(profile.UserName) && s.Password.Equals(profile.Password));
+            
+            if(login.Count() > 1)
+            {                                
+                session.SetString("UserName", profile.UserName);                
+                if(session.Keys.Contains("CustomerID"))
+                {
+                   profile.CustomerID = session.GetInt32("CustomerID").Value;
+                }
+                return profile;
+            }
+            else
             {
-
+                return profile;
             }
         }
     }

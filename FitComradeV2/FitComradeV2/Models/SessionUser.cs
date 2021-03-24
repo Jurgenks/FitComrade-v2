@@ -10,9 +10,7 @@ namespace FitComradeV2.Models
     {
         public string SessionUserID { get; set; }
         public int ProfileID { get; set; }
-        public string CartID { get; set; }
-
-        
+        public string CartID { get; set; }        
         
         public SessionUser GetSession(ISession session, SessionUser sessionUser)
         {
